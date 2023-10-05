@@ -1,0 +1,19 @@
+.vscode/settings.json
+.VSCodeCounter/2023-10-04_00-33-22/details.md
+.VSCodeCounter/2023-10-04_00-33-22/diff-details.md
+.VSCodeCounter/2023-10-04_00-33-22/diff.csv
+.VSCodeCounter/2023-10-04_00-33-22/diff.md
+.VSCodeCounter/2023-10-04_00-33-22/diff.txt
+.VSCodeCounter/2023-10-04_00-33-22/results.csv
+.VSCodeCounter/2023-10-04_00-33-22/results.json
+.VSCodeCounter/2023-10-04_00-33-22/results.md
+.VSCodeCounter/2023-10-04_00-33-22/results.txt
+data/__pycache__/__init__.cpython-311.pyc
+data/__pycache__/config.cpython-311.pyc
+data/__pycache__/food.cpython-311.pyc
+data/__pycache__/game_over_scene.cpython-311.pyc
+data/__pycache__/main_loop_scene.cpython-311.pyc
+data/__pycache__/snake.cpython-311.pyc
+data/__pycache__/title_scene.cpython-311.pyc
+data/__pycache__/tools.cpython-311.pyc
+design doc.txt
