@@ -4,6 +4,11 @@ import pygame
 import data.config as config
 import data.tools as tools
 from data.snake import Snake
+from pygame.locals import (
+    K_ESCAPE,
+    K_SPACE,
+    QUIT,
+)
 
 class TitleScene():
     def __init__(self, persistent_data) -> None:
@@ -24,6 +29,9 @@ class TitleScene():
         for event in events:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 self.switch_to_scene("MAIN_LOOP")
+            elif event.type == pygame.KEYDOWN:
+                if event.key == K_SPACE:
+                    self.switch_to_scene("MAIN_LOOP")
         # elif event.type == pygame.QUIT: # Stops if the user clicks the window close button
         #     self.terminate()
     
