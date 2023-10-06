@@ -4,6 +4,7 @@ import data.config as config
 from data.main_loop_scene import MainLoopScene
 from data.game_over_scene import GameOverScene
 from data.title_scene import TitleScene
+from data.hsinfo_scene import HSinfoScene
 import pygame
 from time import sleep
 from pygame.locals import (
@@ -35,7 +36,8 @@ def run_game(width, height, starting_scene):
     scene_dict =  {
         "MAIN_LOOP" : MainLoopScene,
         "GAME_OVER" : GameOverScene, 
-        "TITLE" : TitleScene
+        "TITLE" : TitleScene,
+        "HS_INFO" : HSinfoScene
         }
 
     active_scene = starting_scene
