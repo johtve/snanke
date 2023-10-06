@@ -6,8 +6,8 @@ import pygame
 
 pygame.font.init()
 
-small_font = pygame.font.SysFont(None, 30) #Font object used for drawing various text
-big_font = pygame.font.SysFont(None, 40)
+small_font = pygame.font.Font("data/assets/bahnschrift.ttf", 20) #Font object used for drawing various text
+big_font = pygame.font.Font("data/assets/bahnschrift.ttf", 35)
 
 
 #lets you centre something on the screen based on its size
@@ -35,3 +35,34 @@ def draw_game_start_text(screen):
     text = big_font.render(f"PRESS SPACE TO START", True, "BLACK")
     centred_coords = centre_coords(text.get_rect().width, text.get_rect().height)
     screen.blit(text, (centred_coords[0], centred_coords[1]))
+
+
+class Button(pygame.rect.Rect):
+    def __init__(self, text: str, func, x, y, width=200, height=100, colour="grey") -> None:
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+        self.text = text
+        self.colour = colour
+        self.func = func
+        self.border_colour = "BLACK"
+        
+        self.border_rect = (pygame.rect.Rect(self.x, self.y, self.width, self.height))
+    
+    def draw(self, screen):
+        text_render = small_font.render(self.text, True, "BLACK")
+        text_x = self.x + (self.width - text_render.get_width())/2
+        text_y = self.y + (self.height - text_render.get_height())/2
+
+        pygame.draw.rect(screen, self.colour, self)
+        pygame.draw.rect(screen, self.border_colour, self.border_rect, (1))
+        screen.blit(text_render, (text_x, text_y))
+
+    def mouse_on(self, mouse_pos):
+        if self.left < mouse_pos[0] < self.right and self.top < mouse_pos[1] < self.bottom:
+            return True
+        else:
+            return False
+        
+

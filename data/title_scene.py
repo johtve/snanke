@@ -22,19 +22,34 @@ class TitleScene():
         for block in self.demo_snake:
             block.direction == self.demo_snake.head_direction
 
-        self.buttons = []
+        self.buttons = self.generate_buttons()
+
         self.title = pygame.image.load("data/assets/title.png")
         self.title = pygame.transform.scale(self.title, (config.SCREEN_WIDTH_PX*0.4, config.SCREEN_HEIGHT_PX*0.4))
     def process_input(self, events):
         for event in events:
             if event.type == pygame.MOUSEBUTTONDOWN:
-                self.switch_to_scene("MAIN_LOOP")
+                mouse_pos = pygame.mouse.get_pos()
+
+                # if self.buttons["singleplayer"]["obj"].mouse_on(mouse_pos):
+                #     self.sp_button_func()
+                # elif self.buttons["multiplayer"]["obj"].mouse_on(mouse_pos):
+                #     self.lmp_button_func()
+                # elif self.buttons["h_and_s"]["obj"].mouse_on(mouse_pos):
+                #     self.h_and_s_button_func()
+
+
+                for b_name in self.buttons.keys():
+                    if self.buttons[b_name]["obj"].mouse_on(mouse_pos):
+                        self.buttons[b_name]["func"]()
+
+
             elif event.type == pygame.KEYDOWN:
                 if event.key == K_SPACE:
                     self.switch_to_scene("MAIN_LOOP")
         # elif event.type == pygame.QUIT: # Stops if the user clicks the window close button
         #     self.terminate()
-    
+
     def update(self):
         # demo snake moves with a certain interval, like a regular snake
         if round(tools.time_since(self.demo_snake.last_move), -1) > round(1000/self.demo_snake.speed):
@@ -59,16 +74,53 @@ class TitleScene():
         screen.blit(self.title, title_rect)
 
         self.demo_snake.draw_all(screen)
+        
+        for b_name in self.buttons.keys():
+            self.buttons[b_name]["obj"].draw(screen)
     
     def switch_to_scene(self, next_scene):
         self.next_name = next_scene
 
-
     def terminate(self):
         self.switch_to_scene(None)
 
+    def generate_buttons(self):
+        
+        # this is a bit of a cursed way of doing this, but essentially i needed a way to -
+        # - iterably create buttons so they're positioned below each other.
+        # this allows for creating and handling the buttons in a general way without hardcoding -
+        # the formatting
+        
+        # has to be a way to only iteratively do the positioning without having to do all this shit
+
+        # button object is placed at [name]["obj"] by generate_buttons()
+        buttons = {
+            "singleplayer" : {"text" : "Singleplayer", "func" : self.sp_button_func},
+            "multiplayer" : {"text" : "Multiplayer", "func" : self.lmp_button_func},
+            "hs_info" : {"text" : "Health and safety information", "func": self.hsinfo_button_func}
+        }
+
+        button_width = config.SCREEN_WIDTH_PX/3
+        button_height = config.SCREEN_HEIGHT_PX/15
+
+        counter = 0
+        for name in buttons.keys():
+            buttons[name]["obj"] = tools.Button(buttons[name]["text"], buttons[name]["func"], x=config.SCREEN_WIDTH_PX/2-button_width/2, y=config.SCREEN_HEIGHT_PX/1.7+counter*button_height*1.5, width=button_width, height=button_height)
+            counter += 1
+        return buttons
 
 
-class TitleButtons():
-    def __init__(self) -> None:
-        pass
+    # these funcs are executed when the user clicks a given button
+    # remember to change the amount of players when changing the mode. should do it differently if accomodating for more players
+    def sp_button_func(self):
+        self.persistent_data["mode"] = "sp"
+        self.persistent_data["players"] = 1
+        self.switch_to_scene("MAIN_LOOP")
+    
+    def lmp_button_func(self):
+        self.persistent_data["mode"] = "lmp"
+        self.persistent_data["players"] = 2
+        self.switch_to_scene("MAIN_LOOP")
+    
+    def hsinfo_button_func(self):
+        self.switch_to_scene("HS_INFO")
