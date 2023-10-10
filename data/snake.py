@@ -252,7 +252,7 @@ class Snake(pygame.sprite.Group):
                 # print(new_block_direction, new_block_x, new_block_y)
 
                 self.points += 1
-                self.add(SnakeBlock(snake=self, x=new_block_x, y=new_block_y, direction=new_block_direction))
+                self.add(SnakeBlock(snake=self, x=new_block_x, y=new_block_y, direction=new_block_direction, colour=self.colour))
                 self.direction_change_coords[(self.sprites()[-1].x, self.sprites()[-1].y)] = self.sprites()[-1].direction
                 #^ if the snake breaks, try switching the snakeblock generation line and the direction_change_coords line
 
@@ -280,7 +280,9 @@ class Snake(pygame.sprite.Group):
     #draws the snake body AND the sprite for the head
     def draw_all(self, screen):
         if not config.DEBUG:
-            self.draw(screen)
+            # self.draw(screen)
+            for block in self.sprites():
+                pygame.draw.rect(screen, block.colour, block.rect)
         else:
             #draws an unfilled rectangle instead of the full sprite, if debug is enabled
             for block in self.sprites():

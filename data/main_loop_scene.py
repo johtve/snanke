@@ -45,7 +45,7 @@ class MainLoopScene():
             if self.persistent_data["mode"] == "lmp":
                 self.all_snakes.append(Snake(i+1, input_modes[i], config.SCREEN_WIDTH_PX/2-x_offset, config.SCREEN_HEIGHT_PX/2-y_offset, snake_start_directions[i%2], colour=config.SNAKE_COLOURS[i])) # i+1 is to get the numbering right. first snake is snake 1
             elif self.persistent_data["mode"] == "sp":
-                self.all_snakes.append(Snake(1, input_modes[0], config.SCREEN_WIDTH_PX/2-x_offset, config.SCREEN_HEIGHT_PX/2-y_offset, snake_start_directions[0])) # i+1 is to get the numbering right. first snake is snake 1
+                self.all_snakes.append(Snake(1, input_modes[0], config.SCREEN_WIDTH_PX/2-x_offset, config.SCREEN_HEIGHT_PX/2-y_offset, snake_start_directions[0], colour=config.SNAKE_COLOURS[0]))
         
         self.food = Food()
         self.food.generate_food(config.STARTING_FOOD_AMOUNT, self.all_snakes)
@@ -75,8 +75,10 @@ class MainLoopScene():
         self.sync_snakes()
 
         for snake in self.all_snakes:
+            if self.persistent_data["mode"] == "lmp": #debug
+                print(f"DIFFERENCE: {self.all_snakes[0].last_move-self.all_snakes[1].last_move}")
+            
             # waits for the second expression's number of milliseconds between each time it executes this block
-            print(f"DIFFERENCE: {self.all_snakes[0].last_move-self.all_snakes[1].last_move}")
             if round(tools.time_since(snake.last_move), -1) > round(1000/snake.speed):
 
                 # this if/elif block sets depends on game rules, and mainly handles win conditions
@@ -148,5 +150,5 @@ class MainLoopScene():
             for snake in self.all_snakes:
                 if tools.time_since(self.last_sync) > round(1000/snake.speed)*interval:
                     snake.last_move = 0
-            print("SNAKES SYNCED")
+            #print("SNAKES SYNCED")
             self.last_sync = pygame.time.get_ticks()

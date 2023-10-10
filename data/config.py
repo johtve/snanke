@@ -19,10 +19,18 @@ DEFAULT_SNAKE_SPEED = 5 #grid squares per second. 6.67 = 150 ms between each ste
 STARTING_BLOCKS_AMOUNT = 3 #How many blocks in the snake the player starts with
 STARTING_FOOD_AMOUNT = 7
 
+# snake colours are currently assigned iteratively, NOT randomly.
+# this means player 1 is always colour 0, 2 is colour 1, etc.
+# in the future this should be changed to generate a random colour for each player in multiplayer when the game is booted,
+# and keeping that colour until the game is closed
+# storing a persistent colour required a major restructuring of the way persistent data is saved,
+# which proved to be, as we call it in the industry, a bitch
+# but it might still be implemented in the future
+
 SNAKE_COLOURS =  [
-    (16.8, 79, 0), # dark green
-    (14, 132, 142), # blue
-    (166, 225, 19)
+    (16.8, 79, 0), # dark green (default)
+    (20, 49, 92), # dark blue
+    (166, 225, 19) # yellow
 ]
 
 
