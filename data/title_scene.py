@@ -3,7 +3,7 @@
 import pygame
 import data.config as config
 import data.tools as tools
-from data.snake import Snake
+from data.snake import Snake, SnakeBlock
 from pygame.locals import (
     K_ESCAPE,
     K_SPACE,
@@ -31,18 +31,12 @@ class TitleScene():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_pos = pygame.mouse.get_pos()
 
-                # if self.buttons["singleplayer"]["obj"].mouse_on(mouse_pos):
-                #     self.sp_button_func()
-                # elif self.buttons["multiplayer"]["obj"].mouse_on(mouse_pos):
-                #     self.lmp_button_func()
-                # elif self.buttons["h_and_s"]["obj"].mouse_on(mouse_pos):
-                #     self.h_and_s_button_func()
-
-
                 for b_name in self.buttons.keys():
                     if self.buttons[b_name]["obj"].mouse_on(mouse_pos):
                         self.buttons[b_name]["func"]()
 
+                if self.mouse_on_demo_snake(mouse_pos):
+                    self.demo_snake.append_block(save_coords=False) # snake breaks if the demo snake saves coords here
 
             elif event.type == pygame.KEYDOWN:
                 if event.key == K_SPACE:
@@ -53,7 +47,7 @@ class TitleScene():
     def update(self):
         # demo snake moves with a certain interval, like a regular snake
         if round(tools.time_since(self.demo_snake.last_move), -1) > round(1000/self.demo_snake.speed):
-            if self.snake_moves == 25:
+            if self.snake_moves == config.SCREEN_WIDTH_SQ + len(self.demo_snake.sprites()*2) + 2: # makes it move all the way out of the window, then back in again regardless of length
                 # turn the demo snake around if it's gone far enough
                 if self.demo_snake.head_direction == "right":
                     self.demo_snake.head_direction = "left"
@@ -124,3 +118,8 @@ class TitleScene():
     
     def hsinfo_button_func(self):
         self.switch_to_scene("HS_INFO")
+
+    def mouse_on_demo_snake(self, mouse_pos):
+        for block in self.demo_snake:
+            if block.rect.left < mouse_pos[0] < block.rect.right and block.rect.top < mouse_pos[1] < block.rect.bottom:
+                return True
