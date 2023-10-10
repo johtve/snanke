@@ -1,5 +1,6 @@
 import data.tools as tools
 import data.config as config
+import pygame
 from pygame.locals import (
     K_ESCAPE,
     K_SPACE,
@@ -12,12 +13,21 @@ class GameOverScene():
         self.name = "GAME_OVER"
         self.next_name = "GAME_OVER"
         self.persistent_data = persistent_data
-        print("GAMOVERSCENE INIT RAN")
+        
+        # list in case there's need for more buttons
+        self.buttons = []
+        self.buttons.append(tools.Button("Main menu", self.title_button_func, config.SCREEN_WIDTH_PX/20, config.SCREEN_WIDTH_PX/20, 130, 30))
+
+
 
     def process_input(self, events):
         for event in events:
             if event.type == KEYDOWN and event.key == K_SPACE:
                 self.switch_to_scene("MAIN_LOOP")
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if self.buttons[0].mouse_on(pygame.mouse.get_pos()):
+                    self.title_button_func()
+            
     
     def update(self):
         pass
@@ -26,6 +36,8 @@ class GameOverScene():
         screen.fill((16.8, 154, 0))
         self.draw_game_over_text(screen, self.persistent_data)
     
+        for button in self.buttons:
+            button.draw(screen)
     def switch_to_scene(self, next_scene):
         self.next_name = next_scene
     
@@ -79,3 +91,6 @@ class GameOverScene():
                 winner = player
         
         return winner
+
+    def title_button_func(self):
+        self.switch_to_scene("TITLE")
