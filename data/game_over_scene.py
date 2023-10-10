@@ -41,7 +41,7 @@ class GameOverScene():
         # singleplayer
         if persistent_data["mode"] == "sp":
             lines.append(tools.big_font.render("GAME OVER", True, "BLACK"))
-            lines.append(tools.big_font.render(f"YOU GOT {persistent_data['points'][0]} POINTS", True, "BLACK"))
+            lines.append(tools.big_font.render(f"YOU GOT {persistent_data['points'][1]} POINTS", True, "BLACK"))
             lines.append(tools.small_font.render("wow", True, "BLACK"))
         
         # multiplayer points win condition
