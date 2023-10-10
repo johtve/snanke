@@ -15,19 +15,20 @@ from pygame.locals import (
 
 #######DEFINITIONS#######
 
-# mainly be global to avoid scenes trying to access data that aren't set until the main menu is implemented
-# can probably be made into local within run_game() when that's implemented
-persistent_data = config.persistent_data # dict of data that is transferred between scenes
+# dict of data that is transferred between scenes
+persistent_data = config.persistent_data
 
-# PLACEHOLDERS - DATA WILL ACTUALLY BE SET VIA MAIN MENU
-persistent_data["players"] = 2
-persistent_data["mode"] = "lmp"
+# PLACEHOLDERS - DATA WILL ACTUALLY BE SET VIA MENU
 persistent_data["rules"]["win"] = "survival"
 
 #######MAIN GAME FUNCTION#####
 def run_game(width, height, starting_scene):
     pygame.init()
     screen = pygame.display.set_mode((width, height))
+    pygame.display.set_caption("snanke")
+    
+    icon = pygame.image.load("data/assets/icon.png")
+    pygame.display.set_icon(icon)
 
     #Using the actual classes to switch scenes within each scene class -
     # - quickly results in a lot of circular imports. Instead, all scene switching within -
