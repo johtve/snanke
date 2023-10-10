@@ -150,7 +150,37 @@ class Snake(pygame.sprite.Group):
             return True
         else:
             return False
-        
+    
+
+    # add a snakeblock at the end of the snake
+    def append_block(self, save_coords=True):
+        #this big ol' if block positions the new block relative to the last block of the snake so that the new one takes the old one's position the next frame
+        if self.sprites()[-1].direction == "right":
+            new_block_direction = "right"
+            new_block_x = self.sprites()[-1].x - SnakeBlock.DEFAULT_BLOCK_SIZE[0]
+            new_block_y = self.sprites()[-1].y
+        elif self.sprites()[-1].direction == "left":
+            new_block_direction = "left"
+            new_block_x = self.sprites()[-1].x + SnakeBlock.DEFAULT_BLOCK_SIZE[0]
+            new_block_y = self.sprites()[-1].y
+        elif self.sprites()[-1].direction == "up":
+            new_block_direction = "up"
+            new_block_x = self.sprites()[-1].x
+            new_block_y = self.sprites()[-1].y + SnakeBlock.DEFAULT_BLOCK_SIZE[1]
+        elif self.sprites()[-1].direction == "down":
+            new_block_direction = "down"
+            new_block_x = self.sprites()[-1].x
+            new_block_y = self.sprites()[-1].y - SnakeBlock.DEFAULT_BLOCK_SIZE[1]
+
+
+        # print(self.snake.sprites()[-1].direction)
+        # print(new_block_direction, new_block_x, new_block_y)
+
+        self.add(SnakeBlock(snake=self, x=new_block_x, y=new_block_y, direction=new_block_direction, colour=self.colour))
+        if save_coords == True: # prevents the title screen demo snake breaking, but need to be True for normal gameplay
+            self.direction_change_coords[(self.sprites()[-1].x, self.sprites()[-1].y)] = self.sprites()[-1].direction
+        #^ if the snake breaks, try switching the snakeblock generation line and the direction_change_coords line
+
     def kill(self):
         for block in self.sprites():
             block.kill()
@@ -229,33 +259,8 @@ class Snake(pygame.sprite.Group):
 
         for food_block in food_list:
             if pygame.sprite.spritecollide(food_block, self, False):
-                #this big ol' if block positions the new block relative to the last block of the snake so that the new one takes the old one's position the next frame
-                if self.sprites()[-1].direction == "right":
-                    new_block_direction = "right"
-                    new_block_x = self.sprites()[-1].x - SnakeBlock.DEFAULT_BLOCK_SIZE[0]
-                    new_block_y = self.sprites()[-1].y
-                elif self.sprites()[-1].direction == "left":
-                    new_block_direction = "left"
-                    new_block_x = self.sprites()[-1].x + SnakeBlock.DEFAULT_BLOCK_SIZE[0]
-                    new_block_y = self.sprites()[-1].y
-                elif self.sprites()[-1].direction == "up":
-                    new_block_direction = "up"
-                    new_block_x = self.sprites()[-1].x
-                    new_block_y = self.sprites()[-1].y + SnakeBlock.DEFAULT_BLOCK_SIZE[1]
-                elif self.sprites()[-1].direction == "down":
-                    new_block_direction = "down"
-                    new_block_x = self.sprites()[-1].x
-                    new_block_y = self.sprites()[-1].y - SnakeBlock.DEFAULT_BLOCK_SIZE[1]
-
-
-                # print(self.snake.sprites()[-1].direction)
-                # print(new_block_direction, new_block_x, new_block_y)
-
+                self.append_block()
                 self.points += 1
-                self.add(SnakeBlock(snake=self, x=new_block_x, y=new_block_y, direction=new_block_direction, colour=self.colour))
-                self.direction_change_coords[(self.sprites()[-1].x, self.sprites()[-1].y)] = self.sprites()[-1].direction
-                #^ if the snake breaks, try switching the snakeblock generation line and the direction_change_coords line
-
                 food_block.kill() #remove from all groups
                 return True
     
